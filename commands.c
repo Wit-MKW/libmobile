@@ -627,12 +627,11 @@ static struct mobile_packet *command_data(struct mobile_adapter *adapter, struct
         MOBILE_MAX_TRANSFER_SIZE, NULL);
 
     if (recv_size == -2) {
-        mobile_cb_sock_close(adapter, conn);
-        s->connections[conn] = false;
-
         // If connected to the internet, and a disconnect is received, we
         // should inform the game about a remote disconnect.
         if (internet) {
+            mobile_cb_sock_close(adapter, conn);
+            s->connections[conn] = false;
             packet->command = MOBILE_COMMAND_DATA_END;
         }
         packet->length = 1;
